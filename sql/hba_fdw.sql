@@ -1,0 +1,8 @@
+\set VERBOSITY terse
+CREATE EXTENSION hba_fdw;
+CREATE SERVER hba FOREIGN DATA WRAPPER hba_fdw;
+CREATE FOREIGN TABLE pg_hba (host TEXT) SERVER hba;
+SET client_min_messages TO DEBUG1;
+SELECT * FROM pg_hba;
+ANALYZE pg_hba;
+EXPLAIN SELECT * FROM pg_hba;

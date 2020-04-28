@@ -1,0 +1,5 @@
+# hba_fdw extension
+comment = 'foreign-data wrapper to manipulate pg_hba.conf file'
+default_version = '1.0'
+module_pathname = '$libdir/hba_fdw'
+relocatable = true
