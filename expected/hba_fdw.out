@@ -5,7 +5,6 @@ CREATE FOREIGN TABLE pg_hba (host TEXT) SERVER hba;
 SET client_min_messages TO DEBUG1;
 SELECT * FROM pg_hba;
 DEBUG:  entering function hba_fdw_handler
-DEBUG:  entering function hbaGetForeignRelSize
 DEBUG:  entering function hbaGetForeignPaths
 DEBUG:  entering function hbaGetForeignPlan
 DEBUG:  entering function hbaBeginForeignScan
@@ -15,19 +14,30 @@ DEBUG:  entering function hbaEndForeignScan
 ------
 (0 rows)
 
+SELECT count(1) FROM pg_catalog.pg_statistic WHERE starelid = 'pg_hba'::regclass;
+ count 
+-------
+     0
+(1 row)
+
 ANALYZE pg_hba;
-DEBUG:  entering function hbaAnalyzeForeignTable
-WARNING:  skipping "pg_hba" --- cannot analyze this foreign table
-EXPLAIN SELECT * FROM pg_hba;
-DEBUG:  entering function hbaGetForeignRelSize
+SELECT count(1) FROM pg_catalog.pg_statistic WHERE starelid = 'pg_hba'::regclass;
+ count 
+-------
+     1
+(1 row)
+
+EXPLAIN (COSTS OFF, VERBOSE) SELECT * FROM pg_hba;
+DEBUG:  entering function hba_fdw_handler
 DEBUG:  entering function hbaGetForeignPaths
 DEBUG:  entering function hbaGetForeignPlan
 DEBUG:  entering function hbaBeginForeignScan
 DEBUG:  entering function hbaExplainForeignScan
 DEBUG:  entering function hbaEndForeignScan
-                           QUERY PLAN                            
------------------------------------------------------------------
- Foreign Scan on pg_hba  (cost=0.00..1000.00 rows=1000 width=32)
-   Foreign Hba File: pg_hba.conf
-(2 rows)
+                   QUERY PLAN                    
+-------------------------------------------------
+ Foreign Scan on public.pg_hba
+   Output: host
+   Foreign Hba File: /tmp/master5432/pg_hba.conf
+(3 rows)
 
